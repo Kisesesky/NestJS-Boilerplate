@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException, UploadedFile } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { UsersService } from './../users/users.service';
-import { comparePassword, encryptPassword } from '../utils/password-util';
+import { comparePassword, encryptPassword } from '../../utils/password-util';
 import { ResponseRegisterDto } from './dto/response-register.dto';
 import { LogInDto } from './dto/log-in.dto';
 import { JwtService } from '@nestjs/jwt';

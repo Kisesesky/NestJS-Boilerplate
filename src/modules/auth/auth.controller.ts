@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, NotAcceptableException, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, NotAcceptableException, Res, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -10,6 +10,8 @@ import { Response } from 'express';
 import { ResponseLogInDto } from './dto/response-log-in.dto';
 import { RolesGuard } from './role.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { RequestUser } from '../../decorators/rerquest-user.decorator';
 
 @ApiTags('Authorize User')
 @Controller('auth')
@@ -70,8 +72,9 @@ export class AuthController {
 
   }
   @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(JwtAuthGuard)
   @Post('upload-profile')
-  async uploadProfile(@UploadedFile() file: Express.Multer.File) {
+  async uploadProfile(@UploadedFile() file: Express.Multer.File, @RequestUser() user:User) {
     const resultUrl = await this.authService.uploadProfile(file)
     return { resultUrl }
   }
